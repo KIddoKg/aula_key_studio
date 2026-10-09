@@ -22,7 +22,7 @@ input,select{font:inherit;color:inherit}
   border-radius:10px;box-shadow:0 30px 80px rgba(0,0,0,.6);display:grid;grid-template-columns:64px 230px 1fr;grid-template-rows:52px 1fr;overflow:hidden;position:relative}
 /* title bar */
 .brand{grid-column:1/3;display:flex;align-items:center;gap:10px;padding:0 16px;background:#22262c;border-bottom:1px solid #000}
-.logo{font-weight:800;letter-spacing:.18em;font-size:15px;color:#fff}
+.logo{font-weight:800;letter-spacing:.12em;font-size:14px;color:#fff;white-space:nowrap}
 .logo b{color:var(--accent)}
 .brand .pname{color:#cfd3d8;font-weight:600;font-size:15px;margin-left:8px}
 .titlebar{display:flex;align-items:center;justify-content:center;background:#1c1f24;border-bottom:1px solid #000;position:relative;padding:0 16px}
@@ -183,6 +183,24 @@ table.steps tr.selrow td{background:rgba(255,106,19,.12)}
 .action:active{transform:scale(.98)}
 .action .ic{width:22px;height:22px;flex:none;border-radius:50%;display:grid;place-items:center;font-size:13px;background:#2f353d;border:1px solid #444}
 .action.flash{background:var(--accent);border-color:var(--accent);color:#fff}
+/* waiting screen (no keyboard connected) */
+.wait{position:absolute;inset:52px 0 0 0;z-index:20;display:grid;place-items:center;padding:24px;
+  background:radial-gradient(600px 400px at 50% 35%,rgba(39,179,173,.18),transparent 70%),rgba(13,15,18,.96)}
+.wait[hidden]{display:none}
+.wait .box{max-width:520px;text-align:center}
+.wait h2{margin:18px 0 6px;font-size:22px}
+.wait .steps{text-align:left;margin:18px auto;display:flex;flex-direction:column;gap:10px;max-width:420px}
+.wait .steps div{display:flex;gap:12px;align-items:flex-start;color:#cfd3d8}
+.wait .steps b{flex:none;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:13px}
+.wait .art{position:relative;width:220px;height:110px;margin:0 auto}
+.wait .art .board{position:absolute;inset:20px 0 0 0;border-radius:12px;background:linear-gradient(#e3e7ec,#c5ccd4);box-shadow:0 10px 30px rgba(0,0,0,.5);
+  display:grid;grid-template-columns:repeat(10,1fr);gap:4px;padding:10px}
+.wait .art .board i{border-radius:3px;background:#fff;box-shadow:0 1px 0 #9aa4b1;animation:waitglow 2.4s infinite}
+@keyframes waitglow{0%,100%{background:#fff}50%{background:color-mix(in srgb,var(--accent) 45%,#fff)}}
+.wait .art .cable{position:absolute;left:50%;top:-30px;width:3px;height:50px;background:#6b7380;transform:translateX(-50%);animation:plug 1.6s ease-in-out infinite}
+@keyframes plug{0%,100%{top:-34px}50%{top:-22px}}
+.wait .dots::after{content:"";animation:dots 1.5s steps(4) infinite}
+@keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
 /* model picker */
 .model{appearance:none;-webkit-appearance:none;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23ff6a13' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 8px center;
   border:1px solid transparent;border-radius:6px;padding:5px 30px 5px 10px;font-size:16px;font-weight:700;color:#fff;cursor:pointer;max-width:340px}
@@ -474,6 +492,22 @@ table.steps tr.selrow td{background:rgba(255,106,19,.12)}
       </div>
     </section>
   </main>
+  <div class="wait" id="waitScreen" hidden>
+    <div class="box">
+      <div class="art"><span class="cable"></span><div class="board"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      <h2>Đang chờ bàn phím<span class="dots"></span></h2>
+      <p class="muted" id="waitMsg" style="margin:0">Cắm bàn phím AULA bằng dây USB để bắt đầu.</p>
+      <div class="steps">
+        <div><b>1</b><span>Gạt bàn phím sang <b style="all:unset;color:#fff;font-weight:600">chế độ có dây</b> (dongle 2.4 GHz và Bluetooth không cấu hình được).</span></div>
+        <div><b>2</b><span>Cắm cáp USB-C vào máy.</span></div>
+        <div><b>3</b><span>Bấm <b style="all:unset;color:#fff;font-weight:600">Kết nối bàn phím</b> và chọn bàn phím trong hộp thoại của trình duyệt.</span></div>
+      </div>
+      <div class="row" style="justify-content:center;gap:10px">
+        <button class="btn primary" id="waitConnect" style="padding:10px 22px;font-size:15px">Kết nối bàn phím</button>
+        <button class="btn" id="waitSkip">Xem trước khi chưa có bàn phím</button>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="modal" id="calib" hidden>
   <div class="dialog">
@@ -918,10 +952,11 @@ async function connect(interactive) {
   send('Đồng bộ giờ', k => k.clock(), { quiet: true });
 }
 if ('hid' in navigator) navigator.hid.addEventListener('disconnect', e => {
-  if (kb && (e.device === kb.ctrl || e.device === kb.data)) { kb = null; renderConn(); toast('Bàn phím đã ngắt kết nối', 'warn'); }
+  if (kb && (e.device === kb.ctrl || e.device === kb.data)) { kb = null; waitSkipped = false; renderConn(); toast('Bàn phím đã ngắt kết nối', 'warn'); }
 });
 const hex4 = n => n.toString(16).toUpperCase().padStart(4, '0');
 function renderConn() {
+  renderWait();
   $('#connBtn').classList.toggle('on', !!kb);
   $('#connText').textContent = kb ? 'Đã kết nối (dây)' : 'Chưa kết nối';
   $('#devInfo').innerHTML = kb
@@ -930,6 +965,20 @@ function renderConn() {
   renderScreenNotice();
 }
 $('#connBtn').onclick = () => connect(true);
+// Waiting screen: shown while no keyboard is connected, until the user chooses to look around without one.
+let waitSkipped = false;
+function renderWait() {
+  const w = $('#waitScreen');
+  w.hidden = !!kb || waitSkipped;
+  if (!('hid' in navigator)) {
+    $('#waitMsg').innerHTML = '<span style="color:var(--err)">Trình duyệt này không hỗ trợ WebHID.</span> Hãy mở file bằng Chrome, Edge hoặc Brave.';
+    $('#waitConnect').disabled = true;
+  }
+}
+$('#waitConnect').onclick = () => connect(true);
+$('#waitSkip').onclick = () => { waitSkipped = true; renderWait(); };
+// The browser reports newly plugged devices it already has permission for: connect to them automatically.
+if ('hid' in navigator) navigator.hid.addEventListener('connect', () => { if (!kb) connect(false); });
 
 // ---------------------------------------------------------------- model picker
 let detected = null; // { name, model } from the last connection
