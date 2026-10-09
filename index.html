@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aula Key Studio</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="window">
+  <div class="brand"><span class="logo">AULA<b>·</b>KEY STUDIO</span><span class="pname" id="pageTitle">Lighting Mode</span></div>
+  <div class="titlebar">
+    <select class="model" id="modelSel" title="Chọn mẫu bàn phím"></select>
+    <div class="right">
+      <span class="busy" id="busy">Đang gửi…</span>
+      <button class="conn" id="connBtn" title="Kết nối bàn phím (cắm dây USB)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 0 1-12 0z"/><path d="M12 18v4"/></svg>
+        <span class="dot"></span><span id="connText">Chưa kết nối</span>
+      </button>
+    </div>
+  </div>
+
+  <nav class="rail" id="rail">
+    <button data-go="keys"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg><span class="tip">Phím &amp; Layer</span></button>
+    <button data-go="macro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 10l-2 2 2 2M15 10l2 2-2 2"/></svg><span class="tip">Macro</span></button>
+    <button data-go="lighting"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="tip">Hiệu ứng đèn</span></button>
+    <button data-go="perkey"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.5-.8 1.5-1.6 0-1-.8-1.4-.8-2.3 0-.9.7-1.6 1.6-1.6H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7" r="1"/></svg><span class="tip">Đèn từng phím</span></button>
+    <button data-go="screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4M7 13l3-3 2 2 3-4 3 5"/></svg><span class="tip">Màn hình GIF &amp; Giờ</span></button>
+    <div class="spacer"></div>
+    <button data-go="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg><span class="tip">Cài đặt</span></button>
+  </nav>
+
+  <!-- ============ SUB PANELS ============ -->
+  <aside class="sub art" id="sub">
+    <div class="group" data-for="keys">
+      <h3>Layer</h3>
+      <button class="listitem" data-layer="top">Top Layer <small id="cntTop"></small></button>
+      <button class="listitem" data-layer="fn">Fn Layer <small id="cntFn"></small></button>
+      <h3 style="margin-top:18px">Thao tác</h3>
+      <button class="radio" id="resetLayer"><i></i>Khôi phục layer này</button>
+      <button class="radio" id="calOpen"><i></i>Hiệu chỉnh sơ đồ phím</button>
+      <p class="small muted" style="padding:0 8px">Chọn một phím trên bàn phím, rồi chọn chức năng mới ở bên dưới. Thay đổi được gửi ngay.</p>
+      <p class="small muted" style="padding:0 8px" id="calState"></p>
+    </div>
+    <div class="group" data-for="macro">
+      <div class="toolrow">
+        <button class="icon-btn" id="mNew" title="Macro mới"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg></button>
+        <button class="icon-btn" id="mDel" title="Xoá macro"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
+        <button class="icon-btn" id="mRen" title="Đổi tên"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></button>
+      </div>
+      <div id="macroList"></div>
+    </div>
+    <div class="group" data-for="lighting">
+      <div id="modeList"></div>
+    </div>
+    <div class="group" data-for="perkey">
+      <h3>Tô nhanh</h3>
+      <button class="radio" id="pkFillAll"><i></i>Tô tất cả bằng màu đang chọn</button>
+      <button class="radio" id="pkRainbow"><i></i>Tô cầu vồng</button>
+      <button class="radio" id="pkWasd"><i></i>Làm nổi WASD + mũi tên</button>
+      <button class="radio" id="pkClear"><i></i>Xoá hết màu</button>
+      <p class="small muted" style="padding:0 8px">Chọn màu ở dưới, rồi bấm hoặc kéo chuột lên các phím để tô.</p>
+    </div>
+    <div class="group" data-for="screen">
+      <h3>Kích thước màn hình</h3>
+      <div id="sizeList"></div>
+      <div class="row" style="padding:6px 8px;gap:6px">
+        <input class="num" id="scrW" type="number" min="16" max="320"> × <input class="num" id="scrH" type="number" min="16" max="320">
+      </div>
+      <p class="small muted" style="padding:0 8px">S75 Pro: 135×240 dọc (đã kiểm chứng). Mẫu khác: nếu ảnh trên phím bị méo/lệch, đổi sang cỡ khác rồi tải lại.</p>
+    </div>
+    <div class="group" data-for="settings">
+      <h3>Hệ thống</h3>
+      <button class="listitem on">Cài đặt chung</button>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="main art">
+    <!-- KEYS -->
+    <section class="page" data-page="keys">
+      <div class="calBanner"></div>
+      <div class="tabs">
+        <button class="pill" data-layer="top">Top Layer</button>
+        <button class="pill" data-layer="fn">Fn Layer</button>
+      </div>
+      <div class="kbwrap" id="kbKeys"></div>
+      <div class="card">
+        <div class="row" style="justify-content:space-between;margin-bottom:10px">
+          <h4 style="margin:0" id="assignTitle">Chọn một phím</h4>
+          <span class="small muted" id="assignCurrent"></span>
+        </div>
+        <div class="assign">
+          <div class="cats" id="cats"></div>
+          <div id="catBody"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MACRO -->
+    <section class="page" data-page="macro">
+      <div class="card" style="margin-top:0">
+        <div class="row" style="justify-content:space-between">
+          <h4 style="margin:0" id="macroTitle">Macro</h4>
+          <div class="row" style="gap:8px">
+            <button class="btn primary" id="recBtn">● Bắt đầu ghi</button>
+            <button class="btn" id="addDelay">+ Độ trễ</button>
+            <button class="btn" id="clearSteps">Xoá hết</button>
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px;gap:22px">
+          <label class="check"><input type="checkbox" id="realTiming" checked> Ghi thời gian thật</label>
+          <label class="check">Độ trễ cố định <input class="num" type="number" id="fixedDelay" value="10" min="1"> ms</label>
+        </div>
+        <div class="recpad" id="recPad" style="margin-top:12px">Khi đang ghi: gõ phím bất kỳ, hoặc bấm chuột trái/phải/giữa vào ô này</div>
+        <p class="small muted" style="margin:6px 0 0">Mẹo: tắt bộ gõ tiếng Việt khi ghi macro để không bị ghi thêm phím ảo.</p>
+        <div style="margin-top:14px;max-height:340px;overflow:auto">
+          <table class="steps"><thead><tr><th>#</th><th>Loại</th><th>Nội dung</th><th></th></tr></thead><tbody id="stepBody"></tbody></table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="row" style="justify-content:space-between">
+          <div style="flex:1;min-width:220px">
+            <div class="lbl">Bộ nhớ macro trên bàn phím</div>
+            <div class="meter" id="memMeter" style="margin-top:6px"><i></i></div>
+            <div class="small muted" id="memText" style="margin-top:4px"></div>
+          </div>
+          <button class="btn primary" id="saveMacros">Lưu macro vào bàn phím</button>
+        </div>
+        <p class="small muted" style="margin:10px 0 0">Bộ nhớ macro của bàn phím rất nhỏ (110 byte, khoảng 25 bước cho tất cả macro). Sau khi lưu, vào <b>Phím &amp; Layer → Macro</b> để gán macro cho một phím.</p>
+      </div>
+    </section>
+
+    <!-- LIGHTING -->
+    <section class="page" data-page="lighting">
+      <div class="kbwrap" id="kbLight"></div>
+      <p class="small" id="lightHint" style="text-align:center;color:var(--accent2);margin:10px 0 0;min-height:18px"></p>
+      <div class="card">
+        <div class="grid2">
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div class="slider"><span class="lbl">Lighting Brightness</span><input type="range" id="lBright" min="1" max="5"><span class="val" id="lBrightV"></span></div>
+            <div class="slider" id="lSpeedBox"><span class="lbl">Lighting Speed</span><input type="range" id="lSpeed" min="1" max="5"><span class="val" id="lSpeedV"></span></div>
+            <div id="lDirBox"><span class="lbl">Lighting Direction</span>
+              <div class="row" style="margin-top:6px;gap:8px">
+                <div class="seg" id="lDir"></div>
+              </div>
+            </div>
+          </div>
+          <div id="lColorBox">
+            <div class="row" style="justify-content:space-between;margin-bottom:10px">
+              <span class="lbl">Palette</span>
+              <label class="check"><input type="checkbox" id="lRainbow"> Colorful</label>
+            </div>
+            <div id="cpLight"></div>
+          </div>
+          <p class="muted small" id="lNoColor" hidden>Hiệu ứng này luôn chạy nhiều màu, không chọn màu được (giống app AULA).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PER KEY -->
+    <section class="page" data-page="perkey">
+      <div class="calBanner"></div>
+      <div class="row" style="justify-content:center;margin-bottom:12px"><div class="seg" id="pkTools"></div></div>
+      <div class="kbwrap" id="kbPaint"></div>
+      <div class="card">
+        <div class="grid2">
+          <div id="cpPaint"></div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="slider"><span class="lbl">Độ sáng</span><input type="range" id="pkBright" min="1" max="5"><span class="val" id="pkBrightV"></span></div>
+            <label class="check"><input type="checkbox" id="pkLive" checked> Gửi ngay lên bàn phím khi tô</label>
+            <div class="row"><span class="small muted" id="pkInfo"></span></div>
+            <button class="btn primary" id="pkApply" style="align-self:flex-start">Áp dụng lên bàn phím</button>
+            <p class="small muted" style="margin:0">Bàn phím sẽ chuyển sang chế độ đèn tuỳ chỉnh. Phím không tô sẽ tắt đèn. Chọn lại một hiệu ứng ở trang <b>Hiệu ứng đèn</b> để quay về.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCREEN -->
+    <section class="page" data-page="screen">
+      <div id="screenNotice"></div>
+      <div class="screenstage">
+        <div style="display:flex;flex-direction:column;align-items:center;max-width:380px">
+          <div class="bezel"><canvas id="pv"></canvas></div>
+          <div class="small muted" style="margin-top:8px;text-align:center;word-break:break-word" id="pvInfo">Chưa có ảnh</div>
+        </div>
+        <div style="flex:1;min-width:280px">
+          <div class="drop" id="drop">
+            <input type="file" id="file" accept="image/gif,image/png,image/jpeg,image/webp,image/bmp" hidden>
+            <div style="font-size:15px;font-weight:600;color:#e8eaed">Kéo thả GIF / ảnh vào đây</div>
+            <div class="small" style="margin-top:4px">hoặc bấm để chọn file · GIF, PNG, JPG, WebP</div>
+          </div>
+          <div class="card">
+            <div class="grid2" style="gap:14px 20px">
+              <div class="field"><label>Kiểu khung</label><div class="seg" id="fitSeg"></div></div>
+              <div class="field"><label>Xoay</label><div class="seg" id="rotSeg"></div></div>
+              <div class="slider"><span class="lbl">Phóng to <span id="zoomV" class="muted"></span></span><input type="range" id="zoom" min="25" max="400"></div>
+              <div class="slider"><span class="lbl">Tốc độ phát <span id="speedV" class="muted"></span></span><input type="range" id="gspeed" min="25" max="400" step="25"></div>
+              <div class="slider"><span class="lbl">Dịch ngang <span id="oxV" class="muted"></span></span><input type="range" id="ox" min="-100" max="100"></div>
+              <div class="slider"><span class="lbl">Dịch dọc <span id="oyV" class="muted"></span></span><input type="range" id="oy" min="-100" max="100"></div>
+              <div class="field"><label>Bỏ bớt khung (giảm dung lượng)</label><div class="seg" id="skipSeg"></div></div>
+              <div class="field"><label>Số khung tối đa</label><input class="num" type="number" id="maxFrames" min="1" max="255" style="width:90px"></div>
+              <label class="check"><input type="checkbox" id="smooth"> Làm mịn (tắt cho pixel art)</label>
+              <label class="check">Màu nền <input type="color" id="bgc" style="width:40px;height:26px;border:0;background:none"></label>
+            </div>
+          </div>
+          <div class="strip" id="strip"></div>
+          <div class="card">
+            <div class="row" style="justify-content:space-between">
+              <span class="small muted" id="sizeInfo"></span>
+              <button class="btn primary" id="upload" disabled>Tải lên bàn phím</button>
+            </div>
+            <div class="progress" style="margin-top:10px"><i id="prog"></i></div>
+          </div>
+          <div class="card">
+            <h4>Thời gian</h4>
+            <div class="row" style="justify-content:space-between">
+              <span id="clockNow" style="font-variant-numeric:tabular-nums;font-size:18px;font-weight:600"></span>
+              <button class="btn" id="syncClock">Đồng bộ giờ từ máy Mac</button>
+            </div>
+            <p class="small muted" style="margin:8px 0 0">Giờ được đồng bộ tự động mỗi lần kết nối.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="page" data-page="settings">
+      <div class="card" style="margin-top:0">
+        <h4>Cài đặt hệ thống</h4>
+        <div class="grid2">
+          <div class="field"><label>Tự ngủ sau</label><div class="seg" id="sleepSeg"></div></div>
+          <div class="slider"><span class="lbl">Tốc độ phản hồi phím</span><input type="range" id="resp" min="1" max="5"><span class="val" id="respV"></span></div>
+          <label class="check"><input type="checkbox" id="dWin"> Khoá phím Win (⌘)</label>
+          <label class="check"><input type="checkbox" id="dAltTab"> Khoá Alt+Tab</label>
+          <label class="check"><input type="checkbox" id="dAltF4"> Khoá Alt+F4</label>
+        </div>
+        <div class="row" style="margin-top:14px"><button class="btn primary" id="applySys">Áp dụng</button></div>
+      </div>
+      <div class="card">
+        <h4>Sao lưu &amp; đồng bộ</h4>
+        <p class="small muted" style="margin-top:0">Bàn phím không cho đọc lại cài đặt, nên tool tự lưu một bản trong trình duyệt. Nếu bạn đã chỉnh bằng phần mềm khác, bấm <b>Gửi tất cả</b> để bàn phím khớp lại với tool.</p>
+        <div class="row" style="gap:8px">
+          <button class="btn" id="sendAll">Gửi tất cả lên bàn phím</button>
+          <button class="btn" id="backup">Sao lưu ra file</button>
+          <button class="btn" id="restoreBtn">Khôi phục từ file</button>
+          <input type="file" id="restoreFile" accept="application/json" hidden>
+          <button class="btn danger" id="factory">Về mặc định</button>
+        </div>
+      </div>
+      <div class="card">
+        <h4>Mẫu bàn phím</h4>
+        <div class="small muted" id="modelInfo"></div>
+        <div class="row" style="margin-top:10px;gap:8px">
+          <button class="btn" id="calOpen2">Hiệu chỉnh sơ đồ phím</button>
+          <button class="btn danger" id="calForget">Xoá hiệu chỉnh của mẫu này</button>
+        </div>
+      </div>
+      <div class="card">
+        <h4>Thông tin thiết bị</h4>
+        <div class="small muted" id="devInfo">Chưa kết nối.</div>
+      </div>
+    </section>
+  </main>
+  <div class="wait" id="waitScreen" hidden>
+    <div class="box">
+      <div class="art"><span class="cable"></span><div class="board"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      <h2>Đang chờ bàn phím<span class="dots"></span></h2>
+      <p class="muted" id="waitMsg" style="margin:0">Cắm bàn phím AULA bằng dây USB để bắt đầu.</p>
+      <div class="steps">
+        <div><b>1</b><span>Gạt bàn phím sang <b style="all:unset;color:#fff;font-weight:600">chế độ có dây</b> (dongle 2.4 GHz và Bluetooth không cấu hình được).</span></div>
+        <div><b>2</b><span>Cắm cáp USB-C vào máy.</span></div>
+        <div><b>3</b><span>Bấm <b style="all:unset;color:#fff;font-weight:600">Kết nối bàn phím</b> và chọn bàn phím trong hộp thoại của trình duyệt.</span></div>
+      </div>
+      <div class="row" style="justify-content:center;gap:10px">
+        <button class="btn primary" id="waitConnect" style="padding:10px 22px;font-size:15px">Kết nối bàn phím</button>
+        <button class="btn" id="waitSkip">Xem trước khi chưa có bàn phím</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="calib" hidden>
+  <div class="dialog">
+    <h3>Hiệu chỉnh sơ đồ phím <span class="badge" id="calPhase"></span></h3>
+    <div class="notice" style="margin:8px 0">⚠️ Hãy <b>tắt bộ gõ tiếng Việt</b> (Unikey/EVKey/OpenKey → chuyển sang <b>ABC / English</b>) trước khi hiệu chỉnh. Bộ gõ Telex tự chèn phím ảo làm tool nhảy sai phím.</div>
+    <p class="small muted" style="margin:0">Tool tạm đổi chức năng tất cả phím để nhận ra từng phím. Bấm đúng phím đang <b style="color:var(--accent)">sáng cam</b> trên hình. Xong sẽ tự khôi phục lại các phím như cũ.</p>
+    <div class="bigmsg" id="calMsg"></div>
+    <div class="kbwrap" id="kbCal"></div>
+    <div class="progress" style="margin-top:14px"><i id="calProg"></i></div>
+    <div class="row" style="margin-top:14px;justify-content:space-between">
+      <div class="row" style="gap:8px">
+        <button class="btn" id="calBack">← Lùi lại</button>
+        <button class="btn" id="calSkip">Bỏ qua phím này</button>
+      </div>
+      <div class="row" style="gap:8px">
+        <button class="btn danger" id="calCancel">Huỷ &amp; khôi phục</button>
+        <button class="btn primary" id="calDone">Xong</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toasts"></div>
+
+<script src="js/data.js"></script>
+<script src="js/state.js"></script>
+<script src="js/protocol.js"></script>
+<script src="js/connection.js"></script>
+<script src="js/widgets.js"></script>
+<script src="js/navigation.js"></script>
+<script src="js/page-lighting.js"></script>
+<script src="js/page-perkey.js"></script>
+<script src="js/page-keys.js"></script>
+<script src="js/page-macro.js"></script>
+<script src="js/page-screen.js"></script>
+<script src="js/page-settings.js"></script>
+<script src="js/calibration.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

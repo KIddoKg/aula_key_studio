@@ -1,7 +1,7 @@
 # Aula Key Studio
 
 Phần mềm cấu hình bàn phím AULA chạy ngay trong trình duyệt — dùng được trên **macOS**, Linux và Windows,
-không cần cài driver. Chỉ là một file HTML: mở `aula-studio.html` bằng Chrome / Edge / Brave là xong.
+không cần cài driver, không cần build: tải repo về rồi mở `index.html` bằng Chrome / Edge / Brave là xong.
 
 > Driver chính hãng của AULA chỉ chạy trên Windows. Aula Key Studio nói chuyện trực tiếp với bàn phím qua
 > [WebHID](https://developer.mozilla.org/docs/Web/API/WebHID_API).
@@ -32,13 +32,32 @@ Mẫu dùng chip khác sẽ không hiện trong danh sách kết nối.
 
 ## Cách dùng
 
-1. Mở `aula-studio.html` bằng **Chrome, Edge hoặc Brave** (Safari và Firefox không hỗ trợ WebHID).
+1. Mở `index.html` bằng **Chrome, Edge hoặc Brave** (Safari và Firefox không hỗ trợ WebHID).
 2. Gạt bàn phím sang **chế độ có dây** và cắm cáp USB (dongle 2.4 GHz / Bluetooth không cấu hình được).
 3. Bấm **Chưa kết nối** ở góc trên bên phải và chọn bàn phím.
 4. Lần đầu với mỗi mẫu: vào **Phím & Layer → Hiệu chỉnh sơ đồ phím** (nhớ tắt bộ gõ tiếng Việt trước).
 
 Bàn phím không cho đọc lại cài đặt, nên tool lưu một bản trong trình duyệt. Nếu đã chỉnh bằng phần mềm khác,
 vào **Cài đặt → Gửi tất cả** để đồng bộ lại.
+
+## Cấu trúc
+
+```
+index.html            giao diện (các trang, hộp thoại)
+css/style.css         toàn bộ style
+js/data.js            sơ đồ phím, danh sách mẫu, mã phím HID
+js/state.js           trạng thái lưu trong trình duyệt, mẫu đang chọn
+js/protocol.js        giao thức USB (đèn, phím, macro, màn hình, giờ)
+js/connection.js      kết nối WebHID, tự nhận mẫu, màn chờ, chọn mẫu
+js/widgets.js         vẽ bàn phím, bánh xe màu, thanh trượt
+js/navigation.js      chuyển trang
+js/page-*.js          từng trang: đèn, đèn từng phím, phím, macro, màn hình, cài đặt
+js/calibration.js     hiệu chỉnh sơ đồ phím
+js/main.js            khởi động
+```
+
+Các file JS là script thường (không phải ES module) để mở thẳng từ ổ đĩa (`file://`) vẫn chạy.
+Thứ tự nạp trong `index.html` quan trọng.
 
 ## Giới hạn
 
