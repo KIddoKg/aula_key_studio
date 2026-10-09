@@ -36,7 +36,7 @@ function makeKeyboard(host, { decorate, onKey, drag = false }) {
     const pad = 12, u = (board.clientWidth - pad * 2) / KB_W, g = Math.max(2, u * 0.08);
     board.style.height = (KB_H * u + pad * 2) + 'px';
     const place = (s, o) => { s.left = pad + o.x * u + 'px'; s.top = pad + o.y * u + 'px'; s.width = o.w * u - g + 'px'; s.height = o.h * u - g + 'px'; };
-    for (const k of L) { const s = els.get(k.id).style; place(s, k); s.fontSize = Math.max(7, u * 0.24) + 'px'; }
+    for (const k of L) { const s = els.get(k.id).style; place(s, k); s.fontSize = Math.max(6, u * 0.24 * (k.label.length > 4 && k.w < 1.5 && !k.label.includes('\n') ? .8 : 1)) + 'px'; }
     for (const [el, d] of decos) {
       if (d.t === 'knob') { const dd = Math.min(d.w, d.h) * u * 0.9; Object.assign(el.style, { left: pad + d.x * u + (d.w * u - g - dd) / 2 + 'px', top: pad + d.y * u + (d.h * u - g - dd) / 2 + 'px', width: dd + 'px', height: dd + 'px' }); }
       else place(el.style, d);
